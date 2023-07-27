@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/nkyizbay/shop-project/internal/item"
+	"github.com/nkyizbay/shop-project/internal/user"
 	"github.com/nkyizbay/shop-project/pkg/database"
 	"github.com/spf13/viper"
 )
@@ -20,6 +21,8 @@ func main() {
 
 	fmt.Println(viper.Get("POSTGRES_DB")) // shop
 
+	jwt := viper.GetString("SHOP_GO_JWTKEY")
+
 	connectionPool, err := database.Setup()
 	if err != nil {
 		log.Fatal(err)
@@ -30,6 +33,11 @@ func main() {
 	itemRepo := item.NewItemRepository(connectionPool)
 	itemService := item.NewItemService(itemRepo)
 	item.Handler(router, itemService)
+
+	// USER
+	userRepository := user.NewRepository(connectionPool)
+	userService := user.NewUserService(userRepository)
+	user.NewHandler(router, userService, jwt)
 
 	router.Run(":8080")
 }

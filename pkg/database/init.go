@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/nkyizbay/shop-project/internal/item"
+	"github.com/nkyizbay/shop-project/internal/user"
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -29,7 +30,7 @@ func Setup() (*gorm.DB, error) {
 }
 
 func Migrate() {
-	if err := db.AutoMigrate(&item.Item{}); err != nil {
+	if err := db.AutoMigrate(&item.Item{}, &user.User{}); err != nil {
 		panic(err)
 	}
 }
