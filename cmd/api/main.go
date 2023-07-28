@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nkyizbay/shop-project/internal/auth"
 	"github.com/nkyizbay/shop-project/internal/item"
 	"github.com/nkyizbay/shop-project/internal/user"
 	"github.com/nkyizbay/shop-project/pkg/database"
@@ -18,6 +19,8 @@ func main() {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error while reading config file %s", err)
 	}
+
+	router.Use(auth.TokenMiddleware())
 
 	fmt.Println(viper.Get("POSTGRES_DB")) // shop
 
