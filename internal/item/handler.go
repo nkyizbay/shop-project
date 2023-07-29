@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nkyizbay/shop-project/internal/auth"
 )
 
 type handler struct {
@@ -16,8 +17,8 @@ func Handler(rout *gin.Engine, itemService Service) *handler {
 		itemService: itemService,
 	}
 
-	rout.POST("/items", h.CreateItem)
-	rout.DELETE("/items/:id", h.CancelItem)
+	rout.POST("/items", auth.AdminMiddleware(), h.CreateItem)
+	rout.DELETE("/items/:id", auth.AdminMiddleware(), h.CancelItem)
 
 	return &h
 }

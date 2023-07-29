@@ -60,3 +60,19 @@ func TokenMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func AdminMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// claim := c.Get("claim").(Claims)
+		claim := c.Value("claim").(Claims)
+
+		if claim.IsNotAdmin() {
+			c.String(http.StatusForbidden, "You have no authority")
+
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	}
+}
